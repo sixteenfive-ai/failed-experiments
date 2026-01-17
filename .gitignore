@@ -11,3 +11,7 @@ StoryForge/characters/*
 StoryForge/stories/*
 !StoryForge/stories/sample/
 !StoryForge/stories/sample/**
+
+#pycache
+StoryForge/__pycache__
+StoryForge/__pycache__/**

@@ -1,0 +1,13 @@
+# StoryForge
+# API Keys
+StoryForge/geminikey.txt
+
+# User content
+StoryForge/characters/*
+!StoryForge/characters/Sample_Character/
+!StoryForge/characters/Sample_Character/**
+
+# Generated content
+StoryForge/stories/*
+!StoryForge/stories/sample/
+!StoryForge/stories/sample/**

@@ -1,0 +1,10 @@
+You are a narrative consultant. Examine these character profiles:
+<character_data>
+
+Identify the most compelling main character for a story, why, and create a sample story hook.
+OUTPUT FORMAT:
+{
+  "suggested_main_character": "full name",
+  "reason": "why they are compelling",
+  "sample_hook": "the sample story hook for the character"
+}

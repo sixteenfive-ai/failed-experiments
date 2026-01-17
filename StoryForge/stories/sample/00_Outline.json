@@ -1,0 +1,71 @@
+{
+    "logline": "When Paladin Bettina discovers a coded message hidden within her shield, she enlists a clockwork forger's help, inadvertently exposing a conspiracy involving dragon-human relations and forcing her to choose between political stability and personal gain.",
+    "outline": [
+        {
+            "chapter": 1,
+            "summary": "Bettina, a satyr thief and blood magic user, discovers a hidden compartment within her paladin shield while idly testing its weight. Inside is a coded message. Intrigued by the potential value of the message, Bettina seeks out Martie, a skilled clockwork forger known for her ability to decipher complex mechanisms and replicate documents. She finds Martie in the middle of a heated deal where her talent for mimicry is being put to the test. After it ends, Bettina approaches her. The chapter ends with Martie agreeing to help Bettina, intrigued by the challenge and the potential payment, setting up a meeting at Martie's workshop.",
+            "title": "Shield's Secret"
+        },
+        {
+            "chapter": 2,
+            "summary": "At Martie's workshop, Bettina explains the situation and shows Martie the coded message. Martie begins analyzing the code, recognizing its clockwork-based structure. As Martie works, Bettina grows impatient and starts looking around the workshop. She notices a half-finished replica of an official document that connects to a trade deal with Draconic territories. Martie successfully cracks the code, revealing a message implicating Alli Celio, a powerful dragon girl who brokers deals between draconic territories and human merchant consortiums. The message suggests Alli is manipulating trade routes for her own gain, potentially destabilizing the fragile peace. Bettina sees an opportunity to blackmail Alli for personal gain. The chapter concludes with Bettina and Martie considering their next move, now aware of the potential danger and reward.",
+            "title": "Clockwork Keys"
+        },
+        {
+            "chapter": 3,
+            "summary": "Bettina, driven by her pragmatic nature, decides to confront Alli Celio with the coded message and attempts to blackmail her. She arranges a meeting with Alli under the pretense of offering her services. The two meet in a neutral location, and Bettina presents the evidence. Alli, known for her intimidating presence, is initially furious but maintains her composure. She neither confirms nor denies the message but instead proposes a deal: Bettina will investigate the source of the message, and in return, Alli will ensure Bettina's silence and provide her with a substantial reward. Bettina, realizing the potential danger of crossing Alli, agrees, seeing it as a more profitable and less risky option. Alli brings in Tawnya to investigate the source. The chapter ends with Bettina beginning her investigation, now working for Alli but still keeping her own interests in mind.",
+            "title": "Dragon's Gambit"
+        },
+        {
+            "chapter": 4,
+            "summary": "Bettina starts her investigation by infiltrating human merchant consortiums, seeking information about the origin of the coded message and any potential conspiracies against Alli. She uses her thieving skills and blood magic to gather information discreetly. Martie provides Bettina with forged credentials and access to restricted areas, highlighting her own ambitions and willingness to play both sides. Bettina discovers a faction within the consortiums who believe Alli is favoring draconic interests over human profits and that the coded message was leaked by someone within their ranks. Cristionna learns of the plot to bring Alli down, and is worried what will come from all of this. The chapter concludes with Bettina identifying a key suspect: a disgruntled merchant who lost a lucrative trade deal to Alli.",
+            "title": "Whispers in the Consortium"
+        },
+        {
+            "chapter": 5,
+            "summary": "Bettina confronts the disgruntled merchant and learns that he created the coded message as part of a larger plot to destabilize Alli's position and replace her with someone more favorable to human interests. Cristionna begins her investigation into the various consortiums and learns of their attempt to destroy Alli. She confronts the lead and warns her the alliance will break should she fall to their greed. She relays what she has found to Alli who begins her own investigation into the matter with Tawnya. While there is chaos abounding, things seem to be balancing out with both allies and enemies.",
+            "title": "Diplomatic Currents"
+        },
+        {
+            "chapter": 6,
+            "summary": "The rogue merchants decide to take matters into their own hands by sending out mercenaries to disrupt the trade deals, which Bettina learns of and attempts to tell to Alli, but finds that the lines of communication are getting crossed. She relays her findings to Alli. Alli realizes the situation is spiraling out of control and confronts the merchant consortiums, threatening to cut off all trade with humans if they don't cease their attacks. Her intimidation and decisive action quell the immediate threat. The tensions in the region begin to stabilize, though nothing may be guaranteed.",
+            "title": "Veiled Scales"
+        },
+        {
+            "chapter": 7,
+            "summary": "With the conspiracy exposed and the trade routes temporarily stabilized, Bettina is faced with a choice: continue working for Alli and secure a comfortable reward, or use her knowledge to further her own ambitions, potentially disrupting the fragile peace for personal gain. Martie encourages Bettina to leverage her position for greater power. After some careful considerations, she decides to remain neutral, providing Alli with the information needed to maintain stability but extracting a higher price for her services. In this, everyone gets out of their problem more than a little bit richer, and things hopefully continue to smooth on without a great loss.",
+            "title": "Choices Forged"
+        }
+    ],
+    "protagonist_arc": "Bettina's pragmatic nature is tested as she navigates a complex political landscape. Initially seeking only personal gain from the coded message, she gradually becomes entangled in the conspiracy, forcing her to confront her own apathy and make a difficult choice that could have lasting consequences.",
+    "selected_side_characters": {
+        "Alli Celio": "A central figure in the conspiracy, providing a contrasting viewpoint to Bettina and escalating the stakes.",
+        "Cristionna Marlea": "A Nekomata diplomat who becomes involved in mediating the conflict, offering a neutral perspective and potential solutions.",
+        "Martie Flem": "Bettina's reluctant ally, offering a different perspective on the human-dragon conflict and adding intrigue with her forgery skills.",
+        "Tawnya Etana": "Hired by Alli to investigate, Tawnya adds much-needed muscle and a military mind to keep the protagonists on edge."
+    },
+    "subplots": [
+        {
+            "description": "Alli struggles to maintain the fragile peace between draconic territories and human merchant consortiums while battling internal dissent from those who believe she is being manipulated by humans. Her efforts to suppress the conspiracy could lead to accusations of treason and loss of power.",
+            "focus": "Character-driven",
+            "involved_character_names": [
+                "Alli Celio",
+                "Cristionna Marlea"
+            ],
+            "resolution_arc": "Alli successfully quells the immediate threat of the conspiracy but is left with simmering doubts about the trustworthiness of both draconic and human allies, leading her to adopt a more isolationist stance, ensuring the stability she worked toward in the short term but seeding further instability in the long term.",
+            "title": "Alli's Burden"
+        },
+        {
+            "complication": "Betrayal",
+            "description": "Martie, the clockwork forger, is initially driven by the challenge of deciphering the code and the payment offered by Bettina. However, as she delves deeper into the conspiracy, she sees an opportunity to leverage her skills for her own advancement, potentially betraying Bettina and playing both sides to secure a better position for herself.",
+            "focus": "Thematic",
+            "involved_character_names": [
+                "Martie Flem",
+                "Bettina Ohare"
+            ],
+            "resolution_arc": "Martie successfully gains some recognition for her skills but finds herself increasingly isolated due to her untrustworthy nature. The experience reinforces her self-serving behavior, confirming her belief that self-reliance is the only path to success.",
+            "title": "Martie's Ambition"
+        }
+    ],
+    "title": "Veiled Scales"
+}

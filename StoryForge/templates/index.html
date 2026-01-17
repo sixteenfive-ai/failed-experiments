@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StoryForge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='index_styles.css') }}">
+</head>
+<body class="bg-[#121212] min-h-screen flex flex-col overflow-x-hidden font-sans">
+
+    <nav class="bg-[#18181b] border-b border-[#27272a] px-8 py-4 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <i class="fa-solid fa-pen-nib text-blue-500 text-2xl"></i>
+            <span class="text-2xl font-bold text-blue-400 tracking-tight">StoryForge</span>
+        </div>
+        
+        <div class="flex items-center gap-4">
+            <button onclick="rescanData()" class="text-gray-500 hover:text-green-400 transition px-2" title="Rescan Character Folders">
+                <i id="iconRefresh" class="fa-solid fa-sync text-lg"></i>
+            </button>
+            <button onclick="toggleSettings()" class="text-gray-500 hover:text-white transition px-2">
+                <i class="fa-solid fa-gear text-lg"></i>
+            </button>
+            <button onclick="toggleTerminal()" class="text-xs text-gray-500 hover:text-white transition">
+                <i class="fa-solid fa-terminal"></i> Logs
+            </button>
+            <button id="btnSuggest" onclick="fetchSuggestion()" 
+                class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-full font-semibold transition flex items-center gap-2 shadow-lg shadow-blue-900/20 text-sm">
+                <i class="fa-solid fa-dice"></i> Suggest Protagonist
+            </button>
+        </div>
+    </nav>
+
+    <div id="terminalPanel" class="hidden bg-black border-b border-gray-800 p-4 h-48 overflow-y-auto terminal font-mono text-xs">
+        <div class="text-gray-500 mb-2">--- StoryForge System Logs ---</div>
+        <div id="logContent"></div>
+    </div>
+
+    <main id="mainContainer" class="flex-grow flex flex-col p-6 w-full h-full relative min-h-[calc(100vh-80px)]">
+
+        <div id="suggestionBox" class="hidden flex-col lg:flex-row gap-0 bg-[#121212] absolute inset-0 z-40">
+            <div class="w-full lg:w-[45%] xl:w-[40%] bg-[#0a0a0a] border-r border-[#27272a] flex flex-col h-full">
+                <div class="flex-grow relative bg-[#050505] flex items-center justify-center overflow-hidden group">
+                    <img id="suggestedImg" src="" class="w-full h-full object-contain transition-opacity duration-300 opacity-0" alt="Character">
+                    <div id="imgPlaceholder" class="absolute inset-0 flex flex-col items-center justify-center text-gray-700 hidden">
+                        <i class="fa-solid fa-user-ghost text-6xl mb-4 opacity-50"></i>
+                        <span class="text-xs uppercase tracking-widest font-bold">No Images Found</span>
+                    </div>
+                </div>
+                <div id="thumbStrip" class="h-24 bg-[#0a0a0a] border-t border-[#27272a] p-3 flex gap-3 overflow-x-auto custom-scrollbar shrink-0"></div>
+            </div>
+
+            <div class="w-full lg:w-[55%] xl:w-[60%] h-full overflow-y-auto custom-scrollbar bg-[#121212] relative">
+                <div class="sticky top-0 z-50 bg-[#121212]/95 backdrop-blur border-b border-[#27272a] px-8 py-6 flex justify-between items-start">
+                    <div>
+                        <span class="text-purple-400 text-[10px] font-bold uppercase tracking-widest block mb-1">
+                            AI Recommendation
+                        </span>
+                        <h1 id="suggestedName" class="text-4xl font-bold text-white tracking-tight">Character Name</h1>
+                        <div class="mt-2">
+                             <span id="suggestedSpecies" class="bg-[#27272a] text-gray-400 border border-[#3f3f46] text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">
+                                Species
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4">
+                        <button onclick="acceptSuggestion()" 
+                            class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-xl font-bold text-lg transition uppercase tracking-widest shadow-lg shadow-blue-900/20 flex items-center gap-2">
+                            <i class="fa-solid fa-check"></i> ACCEPT
+                        </button>
+                        <button onclick="rejectSuggestion()" 
+                            class="bg-red-600 hover:bg-red-500 text-white px-8 py-4 rounded-xl font-bold text-lg transition uppercase tracking-widest shadow-lg shadow-red-900/20 flex items-center gap-2">
+                            <i class="fa-solid fa-xmark"></i> REJECT
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-8 max-w-4xl space-y-8">
+                    <div class="bg-blue-900/10 border border-blue-500/20 rounded-lg p-5">
+                        <h3 class="text-blue-400 text-[10px] font-bold uppercase tracking-widest mb-2">Why this character?</h3>
+                        <p id="suggestedReason" class="text-blue-100/80 text-sm italic leading-relaxed"></p>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest border-b border-[#27272a] pb-2 mb-3">Personality</h3>
+                        <p id="suggestedPersonality" class="text-gray-300 text-sm leading-relaxed"></p>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest border-b border-[#27272a] pb-2 mb-3">Biography</h3>
+                        <p id="suggestedBio" class="text-gray-300 text-sm leading-relaxed whitespace-pre-line"></p>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-bold text-yellow-600 uppercase tracking-widest border-b border-yellow-900/30 pb-2 mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-lightbulb"></i> Potential Hook
+                        </h3>
+                        <p id="suggestedHook" class="text-gray-200 text-sm leading-relaxed"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="outlineBox" class="hidden flex-col bg-[#121212] absolute inset-0 z-50 p-8 overflow-y-auto custom-scrollbar">
+            <div class="max-w-5xl mx-auto w-full mb-8 flex justify-between items-end border-b border-[#27272a] pb-6">
+                <div>
+                    <span class="text-emerald-400 text-[10px] font-bold uppercase tracking-widest block mb-1">
+                        Generated Outline
+                    </span>
+                    <h1 id="outlineTitle" class="text-5xl font-bold text-white tracking-tight">Story Title</h1>
+                    <div id="outlineLogline" class="text-gray-400 mt-2 text-lg italic"></div>
+                </div>
+                <div class="flex gap-4">
+                     <button onclick="backToHooks()" class="bg-[#27272a] hover:bg-blue-900/30 text-gray-300 hover:text-blue-400 border border-[#3f3f46] px-6 py-3 rounded-lg font-bold text-sm transition uppercase tracking-widest">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Choose Different Hook
+                    </button>
+                     <button onclick="rejectOutline()" class="bg-[#27272a] hover:bg-red-900/30 text-gray-300 hover:text-red-400 border border-[#3f3f46] px-6 py-3 rounded-lg font-bold text-sm transition uppercase tracking-widest">
+                        Regenerate
+                    </button>
+                    <button onclick="acceptOutline()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 rounded-lg font-bold text-sm transition uppercase tracking-widest shadow-lg shadow-emerald-900/20">
+                        Start Writing
+                    </button>
+                </div>
+            </div>
+
+            <div class="max-w-5xl mx-auto w-full space-y-12">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <div class="flex flex-col gap-6">
+                        <div class="bg-[#18181b] border border-[#27272a] p-6 rounded-xl h-fit">
+                            <h3 class="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4">
+                                Dramatis Personae
+                            </h3>
+                            <div id="outlineCast" class="flex flex-wrap gap-2"></div>
+                        </div>
+
+                        <div class="bg-[#18181b] border border-[#27272a] p-6 rounded-xl h-fit">
+                            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Original Hook</h3>
+                            <p id="outlineOriginalHook" class="text-sm text-gray-400 leading-relaxed"></p>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#18181b] border border-[#27272a] p-6 rounded-xl h-fit">
+                        <h3 class="text-xs font-bold text-purple-400 uppercase tracking-widest mb-4">
+                            Narrative Threads
+                        </h3>
+                        <div id="outlineSubplots"></div>
+                    </div>
+
+                </div>
+
+                <div>
+                    <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-6">Chapter Breakdown</h3>
+                    <div id="outlineChapters" class="space-y-4"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="gridView" class="hidden w-full max-w-[1800px] mx-auto">
+            <div class="flex justify-between items-end border-b border-[#27272a] pb-2 mb-6">
+                <h3 id="hooksHeader" class="text-xs font-bold text-gray-500 uppercase tracking-widest">
+                    Generated Story Hooks
+                </h3>
+                
+                <button onclick="regenerateHooks()" class="group flex items-center gap-2 text-xs bg-[#27272a] hover:bg-blue-900/20 text-gray-400 hover:text-blue-400 border border-[#3f3f46] hover:border-blue-500/50 px-4 py-2 rounded-lg transition uppercase tracking-widest">
+                    <i id="iconRegenHooks" class="fa-solid fa-rotate-right group-hover:rotate-180 transition-transform duration-500"></i>
+                    <span>Generate New Batch</span>
+                </button>
+            </div>
+
+            <div id="hookGrid" class="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6"></div>
+        </div>
+
+    </main>
+
+    <div id="settingsModal" class="hidden fixed top-16 right-8 z-50 bg-[#18181b] border border-[#27272a] rounded-xl shadow-2xl p-6 w-80 animate-fade-in">
+        <div class="flex justify-between items-center mb-6 border-b border-[#27272a] pb-2">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider">Configuration</h3>
+            <button onclick="toggleSettings()" class="text-gray-500 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <div class="space-y-6">
+            <div>
+                <label class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 block">Story Format</label>
+                <div class="space-y-2">
+                    <label class="flex items-center p-2 rounded border border-[#27272a] bg-[#0a0a0a] opacity-50 cursor-not-allowed">
+                        <input type="radio" name="storyFormat" value="Short Story" disabled class="mr-2">
+                        <span class="text-xs text-gray-400">Short Story</span>
+                    </label>
+                    <label class="flex items-center p-2 rounded border border-blue-500/50 bg-blue-900/10 cursor-pointer">
+                        <input type="radio" name="storyFormat" value="Light Novel" checked class="mr-2 accent-blue-500">
+                        <span class="text-xs text-white font-bold">Light Novel (40k-60k)</span>
+                    </label>
+                    <label class="flex items-center p-2 rounded border border-[#27272a] bg-[#0a0a0a] opacity-50 cursor-not-allowed">
+                        <input type="radio" name="storyFormat" value="Novel" disabled class="mr-2">
+                        <span class="text-xs text-gray-400">Full Novel</span>
+                    </label>
+                    <label class="flex items-center p-2 rounded border border-[#27272a] bg-[#0a0a0a] opacity-50 cursor-not-allowed">
+                        <input type="radio" name="storyFormat" value="Game" disabled class="mr-2">
+                        <span class="text-xs text-gray-400">RPG / Game</span>
+                    </label>
+                </div>
+            </div>
+            <div>
+                <div class="flex justify-between items-center mb-2">
+                    <label class="text-xs font-bold text-gray-500 uppercase tracking-widest">Hook Count</label>
+                    <span id="displayHookCount" class="text-blue-400 font-mono text-xs font-bold">8</span>
+                </div>
+                <input type="range" id="settingHookCount" min="1" max="20" value="8" 
+                    class="w-full h-2 bg-[#27272a] rounded-lg appearance-none cursor-pointer accent-blue-600"
+                    oninput="document.getElementById('displayHookCount').innerText = this.value">
+            </div>
+
+            <div>
+                <div class="flex justify-between items-center mb-2">
+                    <label class="text-xs font-bold text-gray-500 uppercase tracking-widest">Story Temperature</label>
+                    <span id="displayTemp" class="text-red-400 font-mono text-xs font-bold">1.2</span>
+                </div>
+                <input type="range" id="settingTemp" min="0.1" max="2.0" step="0.1" value="1.2" 
+                    class="w-full h-2 bg-[#27272a] rounded-lg appearance-none cursor-pointer accent-red-600"
+                    oninput="document.getElementById('displayTemp').innerText = this.value">
+            </div>
+            <div>
+                <label class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 block">Chapter Range</label>
+                <div class="flex gap-4">
+                    <div class="w-1/2">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-[10px] text-gray-400">Min</span>
+                            <span id="displayMinChap" class="text-blue-400 font-mono text-xs font-bold">7</span>
+                        </div>
+                        <input type="range" id="settingMinChap" min="1" max="50" value="7" 
+                            class="w-full h-2 bg-[#27272a] rounded-lg appearance-none cursor-pointer accent-blue-600"
+                            oninput="validateChapterRange('min')">
+                    </div>
+                    <div class="w-1/2">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-[10px] text-gray-400">Max</span>
+                            <span id="displayMaxChap" class="text-blue-400 font-mono text-xs font-bold">20</span>
+                        </div>
+                        <input type="range" id="settingMaxChap" min="1" max="50" value="20" 
+                            class="w-full h-2 bg-[#27272a] rounded-lg appearance-none cursor-pointer accent-blue-600"
+                            oninput="validateChapterRange('max')">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="charModal" class="hidden fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+        <div class="bg-[#18181b] border border-[#27272a] rounded-xl shadow-2xl max-w-2xl w-full overflow-hidden flex flex-col md:flex-row max-h-[80vh]">
+            
+            <div class="w-full md:w-1/3 bg-black relative min-h-[300px]">
+                <img id="modalImg" src="" class="absolute inset-0 w-full h-full object-cover" alt="Character">
+                <div id="modalNoImg" class="hidden absolute inset-0 flex items-center justify-center text-gray-700">
+                    <i class="fa-solid fa-user-slash text-4xl"></i>
+                </div>
+            </div>
+
+            <div class="w-full md:w-2/3 p-6 overflow-y-auto custom-scrollbar relative">
+                <button onclick="closeCharModal()" class="absolute top-4 right-4 text-gray-500 hover:text-white transition">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+
+                <h2 id="modalName" class="text-3xl font-bold text-white mb-1">Name</h2>
+                <span id="modalSpecies" class="text-blue-400 text-xs font-bold uppercase tracking-widest border border-blue-900/50 bg-blue-900/10 px-2 py-0.5 rounded">Species</span>
+
+                <div class="mt-6 space-y-4">
+                    <div>
+                        <h3 class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Role in Story</h3>
+                        <p id="modalRole" class="text-gray-200 text-sm italic border-l-2 border-purple-500 pl-3"></p>
+                    </div>
+                    <div>
+                        <h3 class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Personality</h3>
+                        <p id="modalPersonality" class="text-gray-400 text-sm leading-relaxed"></p>
+                    </div>
+                    <div>
+                        <h3 class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Description</h3>
+                        <p id="modalDesc" class="text-gray-400 text-sm leading-relaxed"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="writingModal" class="hidden fixed inset-0 z-[70] bg-black/90 backdrop-blur-md flex items-center justify-center p-8 animate-fade-in">
+        <div class="max-w-xl w-full text-center">
+            <div class="mb-8">
+                <i class="fa-solid fa-feather-pointed text-6xl text-blue-500 fa-bounce mb-6"></i>
+                <h2 class="text-3xl font-bold text-white mb-2">Forging Your Story</h2>
+                <p id="writingStatus" class="text-blue-300 font-mono text-sm uppercase tracking-widest">Initializing...</p>
+            </div>
+            
+            <div class="w-full bg-[#27272a] rounded-full h-4 mb-8 overflow-hidden border border-[#3f3f46]">
+                <div id="writingProgressBar" class="bg-gradient-to-r from-blue-600 to-purple-600 h-full w-0 transition-all duration-500 ease-out shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
+            </div>
+
+            <div id="writingCompleteMsg" class="hidden">
+                <p class="text-green-400 text-lg mb-6">Story successfully written to disk!</p>
+                <button onclick="closeWritingModal()" class="bg-[#27272a] hover:bg-white/10 text-white border border-white/20 px-8 py-3 rounded-lg font-bold uppercase tracking-widest transition">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>
